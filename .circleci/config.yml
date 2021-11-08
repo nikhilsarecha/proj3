@@ -31,7 +31,7 @@ commands:
             name: Revert migrations
             when: on_fail
             command: |
-              SUCCESS=$(curl -H "token: 34ca8cc7-0d16-450f-96f2-3d46b0dc406e" --request GET https://api.memstash.io/values/migration_<< pipeline.parameters.workflow-id >>)
+              SUCCESS=$(curl -H "token: 34ca8cc7-0d16-450f-96f2-3d46b0dc406e" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
               if (( $SUCCESS == 1 ));
               then
                 cd ~/project/backend
@@ -309,7 +309,7 @@ workflows:
       - scan-backend:
           requires: [test-backend]
       - deploy-infrastructure:
-          requires: [scan-frontend,scan-backend]
+          requires: [scan-frontend, scan-backend]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
