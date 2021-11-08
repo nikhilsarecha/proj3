@@ -268,7 +268,6 @@ jobs:
             apk add --update npm
             pip install awscli
             aws --version
-            apk add --update openssh-client
       - checkout
       - add_ssh_keys:
             fingerprints: ["ac:a6:b8:88:64:18:d9:1d:68:b4:11:1e:77:97:d5:80"]
@@ -287,7 +286,6 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations
