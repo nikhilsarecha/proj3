@@ -3,7 +3,7 @@ orbs:
     aws-cli: circleci/aws-cli@2.0.3
 
 parameters:
-  workflow-id:
+  workflow_id:
     type: string
     default: "${CIRCLE_WORKFLOW_ID:0:7}"
 
@@ -31,8 +31,6 @@ commands:
             name: Revert migrations
             when: on_fail
             command: |
-              # Your Memstash GET URL code goes here
-              # See an example below
               SUCCESS=$(curl -H "token: 34ca8cc7-0d16-450f-96f2-3d46b0dc406e" --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
               if (( $SUCCESS == 1 ));
               then
