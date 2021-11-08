@@ -1,4 +1,4 @@
-- name: Copy files
+- name: Copy backend files
   become: true
   copy:
     src: /home/backend.tar.gz
