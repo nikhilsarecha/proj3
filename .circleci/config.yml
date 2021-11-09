@@ -342,8 +342,6 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
-      - revert-migrations
       # Here's where you will add some code to rollback on failure  
 
 workflows:
