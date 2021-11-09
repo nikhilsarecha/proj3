@@ -309,7 +309,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP= $(aws ec2 describe-instances \
+            export BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' --output text) 
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
@@ -350,9 +350,9 @@ workflows:
       - test-backend:
           requires: [build-backend]
       - scan-frontend:
-          requires: [test-frontend]
+          requires: [build-frontend]
       - scan-backend:
-          requires: [test-backend]
+          requires: [build-backend]
       - deploy-infrastructure:
           requires: [scan-frontend, scan-backend]
       - configure-infrastructure:
