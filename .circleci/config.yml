@@ -250,7 +250,8 @@ jobs:
           when: on_fail
           command: |
               apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
-
+      - destroy-environment
+      - revert-migrations
 
 
   deploy-backend:
@@ -341,6 +342,8 @@ jobs:
             else
               return 1
             fi
+      - destroy-environment
+      - revert-migrations
       # Here's where you will add some code to rollback on failure  
 
 workflows:
