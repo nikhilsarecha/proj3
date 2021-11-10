@@ -366,12 +366,15 @@ jobs:
                 export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                         --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
                 echo Stack names: "${STACKS[@]}"
-                for OldWorkflowID in "${STACKS[@]}": do
-                  if [[ "${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
+                for OldWorkflowID in "${STACKS[@]}"; do
+                  if [[ $OldWorkflowID =~ "${CIRCLE_WORKFLOW_ID:0:7}" ]]
                   then
-                    echo "this is the new stack: ${OldWorkflowID}"
+                    echo "Current: $OldWorkflowID"
                   else
-                    echo "this is the old stack: ${OldWorkflowID}"
+                    export OldId=${OldWorkflowID: -7}
+                    aws s3 rm "s3://udapeople-${OldId}" --recursive
+                    aws cloudformation delete-stack --stack-name "udapeople-backend-${OldId}"
+                    aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldId}"
                   fi
                 done
 
