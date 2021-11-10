@@ -367,6 +367,15 @@ jobs:
                         --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
                 echo Stack names: "${STACKS[@]}"
 
+                for OldWorkflowID in "${STACKS[@]}"; do
+                  if [["${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
+                  then
+                    echo "this is the new stack: ${OldWorkflowID}"
+                  else
+                    echo "this is the old stack: ${OldWorkflowID}"
+                  fi
+                done
+
 workflows:
   default:
     jobs:
