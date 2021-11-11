@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s
+  external_labels:
+    monitor: 'prometheus'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'udapeople'
+    static_configs:
+      - targets: ['ec2-3-90-206-83.compute-1.amazonaws.com:9100']
