@@ -383,14 +383,14 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
-      # - scan-backend:
-      #     requires: [build-backend]
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
+      - scan-backend:
+          requires: [build-backend]
       - deploy-infrastructure:
           requires: [build-frontend, build-backend]
       - configure-infrastructure:
@@ -401,9 +401,9 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-frontend, deploy-backend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]        
+      - smoke-test:
+          requires: [deploy-frontend, deploy-backend]
+      - cloudfront-update:
+          requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]        
