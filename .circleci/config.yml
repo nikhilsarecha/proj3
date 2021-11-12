@@ -224,6 +224,7 @@ jobs:
             cd frontend
             sudo npm install webpack-dev-server -g
             sudo npm install
+      - aws-cli/setup
       - run:
           name: Get backend url
           command: |
@@ -236,8 +237,6 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
-      
-      - aws-cli/setup
       - run:
           name: Deploy frontend objects
           command: |
@@ -403,10 +402,10 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-      - deploy-frontend:
-          requires: [deploy-backend]
       - smoke-test:
           requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
