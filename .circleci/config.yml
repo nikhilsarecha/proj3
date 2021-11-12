@@ -227,7 +227,10 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"\
+                "Name=instance-state-name,Values=running" \
+              --query 'Reservations[*].Instances[*].{Instance:PublicIpAddress}' --output text)
             echo $BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
@@ -400,10 +403,10 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
+      - deploy-frontend:
+          requires: [deploy-backend]
       - smoke-test:
           requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
